@@ -22,7 +22,7 @@ Any quotes data displayed on finviz.com is delayed by 15 minutes for NASDAQ, and
 	   )
     
     func main() {
-	    filter := []string{"ta_averagetruerange_o0.5", "ta_sma20_sa50" }
+	    filter := []string{"ta_averagetruerange_o0.5", "ta_sma20_sa50" } // Add as many Filters to array
 	    k := finviz.Screen(filter)
 	    fmt.Println(k.ToJson())
     }
