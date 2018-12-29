@@ -1,4 +1,4 @@
-The Unofficial Finviz API for golang
+## The Unofficial Finviz API for Golang
 
 **Introduction**
 
