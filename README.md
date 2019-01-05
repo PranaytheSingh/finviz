@@ -12,12 +12,16 @@ Any quotes data displayed on finviz.com is delayed by 15 minutes for NASDAQ, and
 
     go get github.com/shitbox/finviz
 
+<<<<<<< HEAD
 ### Using Screen(..)
+=======
+### Using finviz
+>>>>>>> e4a4cb70c1da36f3f5a522bb25d6e24137c22796
 
     package main
 
     import (
-	      "github.com/shitbox/finviz"
+	      "github.com/shitbox/finviz/finviz"
 	      "fmt"
 	   )
     
@@ -27,7 +31,8 @@ Any quotes data displayed on finviz.com is delayed by 15 minutes for NASDAQ, and
 	    fmt.Println(k.ToJson())
     }
 
-    ------------ Output ------->>
+### Output
+
 	"Stocks": [{
 		"No": "1",
 		"Ticker": "ADIL",
