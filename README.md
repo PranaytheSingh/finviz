@@ -10,7 +10,7 @@ Any quotes data displayed on finviz.com is delayed by 15 minutes for NASDAQ, and
 
 ### Install the latest package
 
-    go get github.com/shitbox/finviz
+    go get github.com/shitbox/finviz/finviz
 
 
 ### Using finviz
