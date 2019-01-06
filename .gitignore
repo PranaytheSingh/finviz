@@ -13,3 +13,6 @@
 
 main.go
 dbreader.go
+Dockerfile
+main
+secrets.json

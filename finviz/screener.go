@@ -2,7 +2,6 @@ package finviz
 	
 import (
 	 "github.com/PuerkitoBio/goquery"
-	 "log"
 	 "fmt"
 	 "encoding/json"
 	 "time"
@@ -14,12 +13,12 @@ site = "http://www.finviz.com/screener.ashx"
 columns = 11
 )
 
-type response struct {
+type Response struct {
 	Stocks []template
 	Time time.Time
 }
 
-func (r response) ToJson() string {
+func (r Response) ToJson() string {
 	jsonData, err := json.Marshal(r)
     if err != nil {
         fmt.Printf("Error: %s", err)
@@ -57,26 +56,35 @@ func get_date() string{
 	return date
 }
 
-func Screen(filters []string) response {
+func Screen(filters []string) (*Response,error) {
 	filtersString := arrayToString(filters)
-	data := Scrape(filtersString)
+	data, err := Scrape(filtersString)
+	if err != nil {
+        fmt.Printf("Error: %s", err)
+        return nil, err
+    }	
 	t := time.Now()
-	return response{data, t}
+	return &Response{data, t},nil
 }
 
-func Scrape(filters string ) []template {
+func Scrape(filters string ) ([]template,error) {
 	
 	var values []string
 	var iterates int
 	var dataarray []template
 	var secondOccurance int
 
-	bod := MakeRequest(site, filters)
+	bod,err := MakeRequest(site, filters)
+	if err != nil {
+        fmt.Println("Error: %s", err)
+        return nil,err
+    }	
 
 	doc, err := goquery.NewDocumentFromReader(bod)
   	
   	if err != nil {
-    	log.Fatal(err)
+  		fmt.Println("Error: %s", err)
+        return nil,err
   	}
 
   	doc.Find("table").Each(func(i int, tablehtml *goquery.Selection) {
@@ -92,7 +100,8 @@ func Scrape(filters string ) []template {
 	})
 
   	if len(values) == 1 {
-  		log.Fatal("No stocks to fetch")
+  		fmt.Println("No stocks to fetch",)
+        return nil,err
   	}
 
   	values = values[1:] //Remove first garbage elemet
@@ -121,5 +130,5 @@ func Scrape(filters string ) []template {
 		j = j + columns
 	}
 
-	return dataarray
+	return dataarray,nil
 }
