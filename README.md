@@ -15,18 +15,42 @@ Any quotes data displayed on finviz.com is delayed by 15 minutes for NASDAQ, and
 
 ### Using finviz
 
-    package main
+   	package main
 
-    import (
-	      "github.com/shitbox/finviz/finviz"
-	      "fmt"
-	   )
-    
-    func main() {
-	    filter := []string{"ta_averagetruerange_o0.5", "ta_sma20_sa50" } // Add as many Filters to array
-	    k := finviz.Screen(filter)
-	    fmt.Println(k.ToJson())
-    }
+	import (
+		"github.com/shitbox/finviz/finviz"
+		"fmt"
+	)
+
+	func get_stocks() (*finviz.Response,error) {
+	    filter := []string{"ta_averagetruerange_o0.5", "ta_sma20_sa50", "ta_sma50_pc" } // Add as many Filters to array
+	    k,err := finviz.Screen(filter)
+	    if err != nil {
+		fmt.Printf("Error: %s", err) 
+		return nil, err
+	    }
+	    return k,err
+	}
+
+	func task() error {
+	    stocks, err := get_stocks()
+	    if err != nil {
+		fmt.Printf("Error: %s", err)
+		return err
+	    }
+	    i := 0
+	    length := len(stocks.Stocks)
+	    fmt.Println(length)
+	    for i < length {
+		fmt.Println(stocks.Stocks[i])
+		i++
+	    }
+	    return nil
+	}
+
+	func main() {
+	    task()
+	}
 
 ### Output
 
