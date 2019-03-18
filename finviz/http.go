@@ -1,28 +1,25 @@
 package finviz
 
-import(
+import (
+	"fmt"
+	"io"
 	"net/http"
-    "fmt"
-    "io"
 )
 
+func MakeRequest(url string, headers string) (io.Reader, error) {
 
+	URL := url + "?f=" + headers
+	req, _ := http.NewRequest("GET", URL, nil)
+	fmt.Println("Requesting.." + URL)
+	res, err := http.DefaultClient.Do(req)
 
-func MakeRequest(url string, headers string) (io.Reader,error) {
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
 
-    URL := url + "?f=" + headers
-    req, _ := http.NewRequest("GET", URL, nil)
-    fmt.Println("Requesting.."+URL)
-    res, err := http.DefaultClient.Do(req)
+	fmt.Println(res.StatusCode)
 
-
-    if err != nil {
-        fmt.Println(err)
-        return nil,err
-    }
-
-    fmt.Println(res.StatusCode)
-
-    peabody := res.Body
-    return peabody, nil
+	peabody := res.Body
+	return peabody, nil
 }
