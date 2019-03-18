@@ -3,9 +3,10 @@ package finviz
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/PuerkitoBio/goquery"
 	"strconv"
 	"time"
+
+	"github.com/PuerkitoBio/goquery"
 )
 
 const (
@@ -14,11 +15,11 @@ const (
 )
 
 type Response struct {
-	Stocks []template
+	Stocks []Template
 	Time   time.Time
 }
 
-func (r Response) ToJson() string {
+func (r Response) ToJSON() string {
 	jsonData, err := json.Marshal(r)
 	if err != nil {
 		fmt.Printf("Error: %s", err)
@@ -26,7 +27,7 @@ func (r Response) ToJson() string {
 	return string(jsonData)
 }
 
-type template struct {
+type Template struct {
 	No               string
 	Ticker           string
 	Company          string
@@ -41,16 +42,16 @@ type template struct {
 	Date             string
 }
 
-func (t template) init(a []string) template {
-	date := get_date()
-	return template{a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9], a[10], date}
+func (t Template) init(a []string) Template {
+	date := getDate()
+	return Template{a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9], a[10], date}
 }
 
-func (t template) print() {
+func (t Template) print() {
 	fmt.Println("********" + t.Ticker + "********")
 }
 
-func get_date() string {
+func getDate() string {
 	year, month, day := time.Now().Date()
 	date := strconv.Itoa(int(month)) + "-" + strconv.Itoa(day) + "-" + strconv.Itoa(year)
 	return date
@@ -67,23 +68,23 @@ func Screen(filters []string) (*Response, error) {
 	return &Response{data, t}, nil
 }
 
-func Scrape(filters string) ([]template, error) {
+func Scrape(filters string) ([]Template, error) {
 
 	var values []string
 	var iterates int
-	var dataarray []template
+	var dataArray []Template
 	var secondOccurance int
 
 	bod, err := MakeRequest(site, filters)
 	if err != nil {
-		fmt.Println("Error: %s", err)
+		fmt.Printf("Error: %s", err)
 		return nil, err
 	}
 
 	doc, err := goquery.NewDocumentFromReader(bod)
 
 	if err != nil {
-		fmt.Println("Error: %s", err)
+		fmt.Printf("Error: %s", err)
 		return nil, err
 	}
 
@@ -123,12 +124,12 @@ func Scrape(filters string) ([]template, error) {
 	for i < iterates {
 
 		temparr := values[j : 11+(11*i)] //Get first 11 from list
-		data := template{}.init(temparr)
-		dataarray = append(dataarray, data)
+		data := Template{}.init(temparr)
+		dataArray = append(dataArray, data)
 
 		i++
 		j = j + columns
 	}
 
-	return dataarray, nil
+	return dataArray, nil
 }
